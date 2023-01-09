@@ -1,0 +1,68 @@
+import bpy
+import os
+
+os.system("cls") #clear de la consola
+
+#RENOMBRAR LOS OBJETOS SELECCIONADOS DE LA ESCENA
+#/------------------------------------------------/
+
+#var = bpy.context.selected_objects
+
+#for ob in var:
+#    ob.name = "cube"
+
+#/------------------------------------------------/
+
+
+#BUSCAR UN OBJETO EN LA ESCENA
+#/------------------------------------------------/
+
+#cadena = "yuju"
+#var = bpy.data.objects
+
+#if var != None:    
+#    for ob in var:
+#        if ob.name.find("yuju") != -1:
+#            print('ENCONTRADO')
+#        else:
+#            print('EFE')
+#else:
+#    print('EFE2')
+
+#/------------------------------------------------/
+
+#BUSCAR UN OBJETO EN LA ESCENA Y AÑADIR UN PREFIJO
+#/------------------------------------------------/
+
+cadena = "c"
+prefijo = "pre_"
+var = bpy.data.objects
+
+if var != None:    
+    for ob in var:
+        if ob.name.find(cadena) != -1:
+            ob.name = prefijo + ob.name
+        else:
+            print('EFE')
+else:
+    print('EFE2')
+
+#/------------------------------------------------/
+
+#BUSCAR UN OBJETO EN LA ESCENA Y AÑADIR UN SUFIJO
+#/------------------------------------------------/
+
+#cadena = "cube"
+#sufijo = "_suf"
+#var = bpy.data.objects
+
+#if var != None:    
+#    for ob in var:
+#        if ob.name.find(cadena) != -1:
+#            ob.name += sufijo
+#        else:
+#            print('EFE')
+#else:
+#    print('EFE2')
+
+#/------------------------------------------------/
