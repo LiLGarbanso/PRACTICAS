@@ -18,14 +18,34 @@ from bpy.props import (StringProperty,PointerProperty,
 from bpy.types import (Panel,
                        PropertyGroup,
                        )
+import os
 
+os.system("cls") #clear de la consola
 #--------------------------------------------------------FUNCIONES-------------------------------------------------------------
 
-def main(context):
-   bpy.ops.mesh.primitive_cube_add(enter_editmode=False, align='WORLD', location=(1, -1, 6), scale=(1, 1, 1))
-   
-def circulo(context):
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, enter_editmode=False, align='WORLD', location=(1, -1, 6), scale=(1, 1, 1))
+def InsertarPrefijo(context):
+    for ob in bpy.context.selected_objects:
+        ob.name = bpy.context.scene.Prefijo + ob.name
+        
+def InsertarSufijo(context):
+    for ob in bpy.context.selected_objects:
+        ob.name += bpy.context.scene.Sufijo    
+        
+def BuscarRemplazar(context):
+    bpy.ops.object.select_all(action='DESELECT')
+    aux = []
+    for ob in bpy.data.objects:
+        if ob.name.find(bpy.context.scene.Buscar) != -1:
+            ob.select_set(True)
+            if(bpy.context.scene.Remplazar != None):
+                aux.append(ob)
+                          
+    for x in aux:
+        x.name = x.name.replace(bpy.context.scene.Buscar, bpy.context.scene.Remplazar, 1)
+    bpy.context.scene.Remplazar = None    
+                
+            
+
     
 
 #--------------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------------
@@ -36,7 +56,7 @@ class OperadorPrefijo(bpy.types.Operator):
     bl_label = "Añadir prefijo"
 
     def execute(self, context):
-        main(context)
+        InsertarPrefijo(context)
         return {'FINISHED'}
     
 class OperadorSufijo(bpy.types.Operator):
@@ -45,7 +65,7 @@ class OperadorSufijo(bpy.types.Operator):
     bl_label = "Añadir sufijo"
 
     def execute(self, context):
-        circulo(context)
+        InsertarSufijo(context)
         return {'FINISHED'}
     
 class OperadorBuscarRemplazar(bpy.types.Operator):
@@ -54,7 +74,7 @@ class OperadorBuscarRemplazar(bpy.types.Operator):
     bl_label = "Buscar y Remplazar"
 
     def execute(self, context):
-        circulo(context)
+        BuscarRemplazar(context)
         return {'FINISHED'}
     
 class OperadorRenombrar(bpy.types.Operator):
