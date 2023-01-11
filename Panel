@@ -1,6 +1,6 @@
 bl_info = {
     "name": "Plantilla base blender",
-    "author": "Venti y Pablo",
+    "author": "Álvaro Gómez-Rey y Pablo Vera",
     "version": (1, 0),
     "blender": (3, 2, 2),
     "location": "Render",
@@ -125,7 +125,7 @@ def register():
         )
         
     bpy.types.Scene.Remplazar = bpy.props.StringProperty(
-        name="",
+        name="por",
         description=":",
         default="",
         maxlen=1024,
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
 class LayoutDemoPanel(bpy.types.Panel):
     """Creates a Panel in the scene context of the properties editor"""
-    bl_label = "Base para addons"
+    bl_label = "Name Editor"
     bl_idname = "SCENE_PT_layout"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -178,43 +178,41 @@ class LayoutDemoPanel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-
         scene = context.scene
 
-       
-       
-        #Botones de tamaño normal
-        layout.label(text="Añadir un prefijo a los objetos seleccionados")
-        row = layout.row()
+        box = layout.box()
+        box.label(text="Añadir un prefijo a los objetos seleccionados")
+        row = box.row()
         row.prop(scene, 'Prefijo')
-        row = layout.row()
+        row = box.row()
         row.scale_y = 1.0
         row.operator("object.operator_prefijo")
         
-        layout.label(text="Añadir un sufijo a los objetos seleccionados")
-        row = layout.row()
+        box = layout.box()
+        box.label(text="Añadir un sufijo a los objetos seleccionados")
+        row = box.row()
         row.prop(scene, 'Sufijo')
-        row = layout.row()
+        row = box.row()
         row.scale_y = 1.0
         row.operator("object.operator_sufijo")
         
-        layout.label(text="Busca una cadena de texto en los nombres de los objetos seleccionados y la remplaza por otra")
-        row = layout.row()
+        box = layout.box()
+        box.label(text="Permite buscar nombres y reemplazarlos")
+        row = box.row()
         row.prop(scene, 'Buscar')
-        row = layout.row()
+        row = box.row()
         row.prop(scene, 'BoolRemplazar')
-        
         if(bpy.context.scene.BoolRemplazar):
             row.prop(scene, 'Remplazar')
-        
-        row = layout.row()
+        row = box.row()
         row.scale_y = 1.0
         row.operator("object.operator_remplazar")
         
+        box = layout.box()
         layout.label(text="Renombra todos los objetos seleccionados")
-        row = layout.row()
+        row = box.row()
         row.prop(scene, 'Renombrar')
-        row = layout.row()
+        row = box.row()
         row.scale_y = 1.0
         row.operator("object.operator_renombrar")
 
