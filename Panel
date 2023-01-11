@@ -24,29 +24,32 @@ os.system("cls") #clear de la consola
 #--------------------------------------------------------FUNCIONES-------------------------------------------------------------
 
 def InsertarPrefijo(context):
-    for ob in bpy.context.selected_objects:
-        ob.name = bpy.context.scene.Prefijo + ob.name
+    if(len(bpy.context.scene.Prefijo) > 0):
+        for ob in bpy.context.selected_objects:
+            ob.name = bpy.context.scene.Prefijo + ob.name
         
 def InsertarSufijo(context):
-    for ob in bpy.context.selected_objects:
-        ob.name += bpy.context.scene.Sufijo    
+    if(len(bpy.context.scene.Sufijo) > 0):
+        for ob in bpy.context.selected_objects:
+            ob.name += bpy.context.scene.Sufijo    
         
 def BuscarRemplazar(context):
-    bpy.ops.object.select_all(action='DESELECT')
-    aux = []
-    for ob in bpy.data.objects:
-        if ob.name.find(bpy.context.scene.Buscar) != -1:
-            ob.select_set(True)
-            if(bpy.context.scene.Remplazar != None):
-                aux.append(ob)
-                          
-    for x in aux:
-        x.name = x.name.replace(bpy.context.scene.Buscar, bpy.context.scene.Remplazar, 1)
-    bpy.context.scene.Remplazar = None    
-                
+    if(len(bpy.context.scene.Buscar) > 0):
+        bpy.ops.object.select_all(action='DESELECT')
+        aux = []
+        for ob in bpy.data.objects:
+            if ob.name.find(bpy.context.scene.Buscar) != -1:
+                ob.select_set(True)
+                if(bpy.context.scene.BoolRemplazar):
+                    aux.append(ob)
+                              
+        for x in aux:
+            x.name = x.name.replace(bpy.context.scene.Buscar, bpy.context.scene.Remplazar, 1)
             
-
-    
+def Renombrar(context):
+    if(len(bpy.context.scene.Renombrar) > 0):
+        for ob in bpy.context.selected_objects:
+            ob.name = bpy.context.scene.Renombrar
 
 #--------------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------------
 
@@ -83,7 +86,7 @@ class OperadorRenombrar(bpy.types.Operator):
     bl_label = "Renombrar"
 
     def execute(self, context):
-        circulo(context)
+        Renombrar(context)
         return {'FINISHED'}
 
 def menu_func(self, context):
@@ -101,39 +104,46 @@ def register():
     bpy.types.VIEW3D_MT_object.append(menu_func)
     
     bpy.types.Scene.Prefijo = bpy.props.StringProperty(
-        name="prefijo",
+        name="Prefijo",
         description=":",
         default="",
         maxlen=1024,
         )
 
     bpy.types.Scene.Sufijo = bpy.props.StringProperty(
-        name="sufijo",
+        name="Sufijo",
         description=":",
         default="",
         maxlen=1024,
         )
         
     bpy.types.Scene.Buscar = bpy.props.StringProperty(
-        name="buscar",
+        name="Buscar",
         description=":",
         default="",
         maxlen=1024,
         )
         
     bpy.types.Scene.Remplazar = bpy.props.StringProperty(
-        name="remplazar",
+        name="",
         description=":",
         default="",
         maxlen=1024,
         )
         
     bpy.types.Scene.Renombrar = bpy.props.StringProperty(
-        name="renombrar",
+        name="Renombrar",
         description=":",
         default="",
         maxlen=1024,
         )
+        
+    bpy.types.Scene.BoolRemplazar = bpy.props.BoolProperty(
+        name = "Remplazar",
+        description=":",
+        default = False
+        )
+        
 
 def unregister():
     bpy.utils.unregister_class(OperadorPrefijo)
@@ -146,6 +156,7 @@ def unregister():
     del bpy.types.Scene.Buscar
     del bpy.types.Scene.Remplazar
     del bpy.types.Scene.Renombrar
+    del bpy.types.Scene.BoolRemplazar
 
 
 if __name__ == "__main__":
@@ -191,7 +202,11 @@ class LayoutDemoPanel(bpy.types.Panel):
         row = layout.row()
         row.prop(scene, 'Buscar')
         row = layout.row()
-        row.prop(scene, 'Remplazar')
+        row.prop(scene, 'BoolRemplazar')
+        
+        if(bpy.context.scene.BoolRemplazar):
+            row.prop(scene, 'Remplazar')
+        
         row = layout.row()
         row.scale_y = 1.0
         row.operator("object.operator_remplazar")
