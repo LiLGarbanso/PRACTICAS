@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "Plantilla base blender",
+    "name": "Renombrador masivo",
     "author": "Álvaro Gómez-Rey y Pablo Vera",
     "version": (1, 0),
     "blender": (3, 2, 2),
@@ -7,7 +7,7 @@ bl_info = {
     "description": "Programa para cambiar los nombres de los objetos seleccionados de la escena. Permite buscar y remplazar una cadena de texto contenida en el nombre y/o añadir un prefijo/sufijo",
     "warning": "",
     "doc_url": "",
-    "category": "Edit names",
+    "category" : "Rename",
 }
 
 import bpy
@@ -136,7 +136,7 @@ class LayoutDemoPanel(bpy.types.Panel):
         row.operator("object.operator_remplazar")
         
         box = layout.box()
-        layout.label(text="Renombra todos los objetos seleccionados")
+        box.label(text="Renombra todos los objetos seleccionados")
         row = box.row()
         row.prop(scene, 'Renombrar')
         row = box.row()
